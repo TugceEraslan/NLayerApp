@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NLayer.Core
+namespace NLayer.Core.Models
 {
-    public class Product: BaseEntity  // BaseEntity den miras aldık
+    public class Product : BaseEntity  // BaseEntity den miras aldık
     {
         public string Name { get; set; }
         public int Stock { get; set; }
