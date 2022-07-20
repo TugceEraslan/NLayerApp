@@ -22,6 +22,7 @@ namespace NLayer.Service.Mapping
                 CreateMap<ProductUpdateDto, Product>(); // Güncelleme işlemi için ProductUpdateDto gelirse Product a dönüştür yani sadece entity e dönüştürmek için.
                                                         //Tersini yapmaya gerek yok o yüzden sonuna .ReverseMap(); eklemedim
                 CreateMap<Product, ProductWithCategoryDto>();  // Product ı, ProductWithCategoryDto ya dönüştürüyorum
+                CreateMap<Category, CategoryWithProductsDto>(); // Category yi CategoryWithProductsDto ya çevireceğim. Tek yönlü olduğu için ReverseMap() yapmadım
             }
         }
     }
