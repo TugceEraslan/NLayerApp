@@ -10,6 +10,6 @@ namespace NLayer.Core.Services
 {
     public interface IProductService:IService<Product>  // IService den miras alsın ve servis içindeki <Product> daki metodlar getirsin
     {
-        Task<List<ProductWithCategoryDto>> GetProductsWithCategory();
+        Task<CustomResponseDto<List<ProductWithCategoryDto>>> GetProductsWithCategory();
     }
 }

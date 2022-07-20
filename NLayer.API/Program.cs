@@ -21,8 +21,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();  // IUnitOfWork ile karþýlaþtýðýmda UnitOfWork ü nesne örneði alacaksýn
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>)); // Generic olduðu için typeof olarak ekelyeceðiz.IGenericRepository<> ile karþýlaþtýðýnda GenericRepository<> den nesne örneði al
 builder.Services.AddScoped(typeof(IService<>), typeof(Service<>));
-
 builder.Services.AddAutoMapper(typeof(MapProfile));
+
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 builder.Services.AddDbContext<AppDbContext>(x =>   // AppDbContext için AppDbContext i ekle
 {

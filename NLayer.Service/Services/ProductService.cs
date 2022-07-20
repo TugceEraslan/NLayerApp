@@ -1,4 +1,5 @@
-﻿using NLayer.Core.DTOs;
+﻿using AutoMapper;
+using NLayer.Core.DTOs;
 using NLayer.Core.Models;
 using NLayer.Core.Repositories;
 using NLayer.Core.Services;
@@ -13,13 +14,20 @@ namespace NLayer.Service.Services
 {
     public class ProductService : Service<Product>, IProductService   // Service katmanından gelen bir çok hazır metodu alsın ve IProductService i de implemente etsin
     {
-        public ProductService(IGenericRepository<Product> repository, IUnitOfWork unitOfWork) : base(repository, unitOfWork)
+        private readonly IProductRepository _productRepository;
+        private readonly IMapper _mapper;
+        public ProductService(IGenericRepository<Product> repository, IUnitOfWork unitOfWork, IMapper mapper, IProductRepository productRepository) : base(repository, unitOfWork)
         {
+            _mapper = mapper;
+            _productRepository = productRepository;
         }
 
-        public Task<List<ProductWithCategoryDto>> GetProductsWithCategory()
+        public async Task<CustomResponseDto<List<ProductWithCategoryDto>>> GetProductsWithCategory()
         {
-            throw new NotImplementedException();
+
+            var products = await _productRepository.GetProductsWithCategory();    // Tüm datayı alayım.
+            var productsDto=_mapper.Map<List<ProductWithCategoryDto>>(products);  // Success() metodu List<ProductWithCategoryDto>>(products) beklediği için _mapper.Map<List<ProductWithCategoryDto>>(products); şeklinde yaptık
+            return CustomResponseDto<List<ProductWithCategoryDto>>.Success(200,productsDto);  // API nin istediği data yı döndüm
         }
     }
 }
