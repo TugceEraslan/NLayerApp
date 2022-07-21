@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NLayer.API.Filters;
 using NLayer.Core.Services;
 using NLayer.Service.Services;
 
 namespace NLayer.API.Controllers
 {
-
+    [ValidateFilterAttiribute]
     public class CategoriesController : CustomBaseController
     {
         private readonly ICategoryService _categoryService;

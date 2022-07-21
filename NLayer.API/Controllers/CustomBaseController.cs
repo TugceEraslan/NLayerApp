@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NLayer.API.Filters;
 using NLayer.Core.DTOs;
 
 namespace NLayer.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
+    [ValidateFilterAttiribute]
     public class CustomBaseController : ControllerBase
     {
         [NonAction]  // Endpoint olmadığını belirtmek için [NonAction] diyorum
