@@ -12,14 +12,12 @@ namespace NLayer.API.Controllers
     public class ProductsController : CustomBaseController
     {
         private readonly IMapper _mapper;
-        private readonly IService<Product> _service;
-        private readonly IProductService productService;
+        private readonly IProductService _service;
 
         public ProductsController(IService<Product> service, IMapper mapper, IProductService productService)
         {
-            _service = service;
             _mapper = mapper;
-            this.productService = productService;
+            _service = productService;
         }
 
         // GET api/products/GetProductsWithCategory
@@ -27,7 +25,7 @@ namespace NLayer.API.Controllers
         [HttpGet("[action]")]  // Bu metod da action un ismini(yani GetProductsWithCategory) direkt olarak alır.İlerde metodunu ismini değiştirsem bile sorun yaratmaz son metodun adını alır
         public async Task<IActionResult> GetProductsWithCategory()
         {
-            return CreateActionResult(await productService.GetProductsWithCategory());  // CreateActionResult metodu CustomResponseDto döner. Onun istediği de GetProductsWithCategory() Dto su
+            return CreateActionResult(await _service.GetProductsWithCategory());  // CreateActionResult metodu CustomResponseDto döner. Onun istediği de GetProductsWithCategory() Dto su
         }
 
         // GET   /api/products
