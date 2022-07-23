@@ -48,6 +48,12 @@ builder.Services.AddDbContext<AppDbContext>(x =>   // AppDbContext için AppDbCon
         option.MigrationsAssembly(Assembly.GetAssembly(typeof(AppDbContext)).GetName().Name);
     }); 
 } );
+  builder.Services.AddSwaggerGen(c => {
+    c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+    c.IgnoreObsoleteActions();
+    c.IgnoreObsoleteProperties();
+    c.CustomSchemaIds(type => type.FullName);
+});
 
 var app = builder.Build();
 
@@ -59,7 +65,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UserCustomException();
+app.UseCustomException();
 
 app.UseAuthorization();
 

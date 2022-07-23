@@ -72,11 +72,11 @@ namespace NLayer.API.Controllers
         {
              var product = await _service.GetByIdAsync(id);
 
-            //if(product== null)
-            //{
-            //    return CreateActionResult(CustomResponseDto<NoContentDto>.Fail(404,"Bu id ye sahip ürün bulunamadı"));
-            //}
-             await _service.RemoveAsync(product);  // 
+            if (product == null)
+            {
+                return CreateActionResult(CustomResponseDto<NoContentDto>.Fail(404, "Bu id ye sahip ürün bulunamadı"));
+            }
+            await _service.RemoveAsync(product);  // 
                 
             return CreateActionResult(CustomResponseDto<NoContentDto>.Success(204)); // Sadece başarılı olduğu durumu döneceğim. Geriye boş sınıf dönmek için de CustomResponseDto<NoContentDto> ı döneceğim
         }
