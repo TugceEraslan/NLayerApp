@@ -29,6 +29,7 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped(typeof(NotFoundFilter<>));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();  // IUnitOfWork ile karþýlaþtýðýmda UnitOfWork ü nesne örneði alacaksýn
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>)); // Generic olduðu için typeof olarak ekelyeceðiz.IGenericRepository<> ile karþýlaþtýðýnda GenericRepository<> den nesne örneði al
 builder.Services.AddScoped(typeof(IService<>), typeof(Service<>));
@@ -48,7 +49,7 @@ builder.Services.AddDbContext<AppDbContext>(x =>   // AppDbContext için AppDbCon
         option.MigrationsAssembly(Assembly.GetAssembly(typeof(AppDbContext)).GetName().Name);
     }); 
 } );
-  builder.Services.AddSwaggerGen(c => {
+  builder.Services.AddSwaggerGen(c => {    // .NET 6 için, Program.cs'de Swagger Generation'ý yapýlandýrdým. Swagger Generation sayfasýnda API tanýmý yüklenemedi hatasý alýyordu
     c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
     c.IgnoreObsoleteActions();
     c.IgnoreObsoleteProperties();
