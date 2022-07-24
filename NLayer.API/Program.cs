@@ -1,8 +1,11 @@
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NLayer.API.Filters;
 using NLayer.API.Middlewares;
+using NLayer.API.Modules;
 using NLayer.Core.Repositories;
 using NLayer.Core.Services;
 using NLayer.Core.UnitOfWorks;
@@ -13,6 +16,7 @@ using NLayer.Service.Mapping;
 using NLayer.Service.Services;
 using NLayer.Service.Validations;
 using System.Reflection;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,15 +34,16 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped(typeof(NotFoundFilter<>));
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();  // IUnitOfWork ile karþýlaþtýðýmda UnitOfWork ü nesne örneði alacaksýn
-builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>)); // Generic olduðu için typeof olarak ekelyeceðiz.IGenericRepository<> ile karþýlaþtýðýnda GenericRepository<> den nesne örneði al
-builder.Services.AddScoped(typeof(IService<>), typeof(Service<>));
-builder.Services.AddAutoMapper(typeof(MapProfile));
+//builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();  // IUnitOfWork ile karþýlaþtýðýmda UnitOfWork ü nesne örneði alacaksýn
+//builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>)); // Generic olduðu için typeof olarak ekelyeceðiz.IGenericRepository<> ile karþýlaþtýðýnda GenericRepository<> den nesne örneði al
+//builder.Services.AddScoped(typeof(IService<>), typeof(Service<>));
+//builder.Services.AddAutoMapper(typeof(MapProfile));
 
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<ICategoryRepository , CategoryRepository>();
-builder.Services.AddScoped<ICategoryService, CategoryService>();
+//builder.Services.AddScoped<IProductRepository, ProductRepository>();
+//builder.Services.AddScoped<IProductService, ProductService>();
+
+//builder.Services.AddScoped<ICategoryRepository , CategoryRepository>();
+//builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 builder.Services.AddDbContext<AppDbContext>(x =>   // AppDbContext için AppDbContext i ekle
 {
@@ -56,6 +61,9 @@ builder.Services.AddDbContext<AppDbContext>(x =>   // AppDbContext için AppDbCon
     c.CustomSchemaIds(type => type.FullName);
 });
 
+builder.Host.UseServiceProviderFactory
+    (new AutofacServiceProviderFactory());
+builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder => containerBuilder.RegisterModule(new RepoServiceModule()));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
