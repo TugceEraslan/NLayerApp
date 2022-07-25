@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using NLayer.Caching;
 using NLayer.Core.Repositories;
 using NLayer.Core.Services;
 using NLayer.Core.UnitOfWorks;
@@ -28,6 +29,7 @@ namespace NLayer.API.Modules
 
             builder.RegisterAssemblyTypes(apiAssembly, repoAssembly, serviceAssembly).Where(x => x.Name.EndsWith("Service")).AsImplementedInterfaces().InstancePerLifetimeScope();    // Sonları Repository ile bitenleri al demek. AsImplementedInterfaces interfacelerini de implemente et demek. InstancePerLifetimeScope(); nesnenin yaşam döngüsü?
 
+            builder.RegisterType<ProductServiceWithCaching>().As<IProductService>(); // IProductService i gördüğünde artık ProductServiceWithCaching in nesen örneğini al diyorum
             // InstancePerLifetimeScope();  .net de Scope a karşılık geliyor
             // InstancePerDependency(); transient e karşılık geliyor
             base.Load(builder); 
