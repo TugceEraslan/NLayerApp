@@ -7,12 +7,7 @@ using NLayer.Core.Repositories;
 using NLayer.Core.Services;
 using NLayer.Core.UnitOfWorks;
 using NLayer.Service.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NLayer.Caching
 {
@@ -33,7 +28,7 @@ namespace NLayer.Caching
 
             // İlk nesne örneği oluşturulduğu anda bir cache leme yapmam gerekiyor
 
-            if(!_memoryCache.TryGetValue(CacheProductKey, out _))  // Eğer yok ise _memoryCache den TryGetValue() ile değeri almaya çalış. Geriye bool döner ve değeri döner. out _ ile değer dönmesini istemiyoruz. bize sadece true,false dönse yeter
+            if (!_memoryCache.TryGetValue(CacheProductKey, out _))  // Eğer yok ise _memoryCache den TryGetValue() ile değeri almaya çalış. Geriye bool döner ve değeri döner. out _ ile değer dönmesini istemiyoruz. bize sadece true,false dönse yeter
             {
                 _memoryCache.Set(CacheProductKey, _repository.GetProductsWithCategory().Result);  // Eğer uygulama ilk ayağa kalktığında cache yoksa bu satırla ilk cachelememizi yaparız
             }
@@ -41,21 +36,21 @@ namespace NLayer.Caching
 
         public async Task<Product> AddAsync(Product entity)
         {
-           await _repository.AddAsync(entity);  // _repository üzerinden AddAsync i çağırıp entity i ekliyorum
-           await _unitOfWork.CommitAsync();  // _unitOfWork üzerinden de veritabanına kaydını sağlıyorum
-            // Cachelemem lazım yani bir data geldi sonuçta
-           await CacheAllProductsAsync();
-           return entity; // entity mizi Db den id siyle birlikte dönelim
+            await _repository.AddAsync(entity);  // _repository üzerinden AddAsync i çağırıp entity i ekliyorum
+            await _unitOfWork.CommitAsync();  // _unitOfWork üzerinden de veritabanına kaydını sağlıyorum
+                                              // Cachelemem lazım yani bir data geldi sonuçta
+            await CacheAllProductsAsync();
+            return entity; // entity mizi Db den id siyle birlikte dönelim
 
         }
 
         public async Task<IEnumerable<Product>> AddRangeAsync(IEnumerable<Product> entities)
         {
-            await _repository.AddRangeAsync(entities);  
-            await _unitOfWork.CommitAsync(); 
+            await _repository.AddRangeAsync(entities);
+            await _unitOfWork.CommitAsync();
             // Cachelemem lazım yani bir data geldi sonuçta
             await CacheAllProductsAsync();
-            return entities; 
+            return entities;
         }
 
         public Task<bool> AnyAsync(Expression<Func<Product, bool>> expression)
@@ -71,7 +66,7 @@ namespace NLayer.Caching
         public Task<Product> GetByIdAsync(int id)
         {
             var product = _memoryCache.Get<List<Product>>(CacheProductKey).FirstOrDefault(x => x.Id == id);
-            if(product == null)
+            if (product == null)
             {
                 throw new NotFoundException($"{typeof(Product).Name}({id}) Not Found");
             }

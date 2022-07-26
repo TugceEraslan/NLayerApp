@@ -3,12 +3,7 @@ using NLayer.Core.Repositories;
 using NLayer.Core.Services;
 using NLayer.Core.UnitOfWorks;
 using NLayer.Service.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NLayer.Service.Services
 {
@@ -49,7 +44,7 @@ namespace NLayer.Service.Services
 
         public async Task<T> GetByIdAsync(int id)
         {
-            var hasProduct= await _repository.GetByIdAsync(id);
+            var hasProduct = await _repository.GetByIdAsync(id);
 
             if (hasProduct == null)
             {
@@ -63,19 +58,19 @@ namespace NLayer.Service.Services
 
         public async Task RemoveAsync(T entity)
         {
-            _repository.Remove(entity);  
+            _repository.Remove(entity);
             await _unitOfWork.CommitAsync(); // Repository de async olmuyordu ama service te SaveChange işlmei gerçekleştireceğimiz için.Önce sileceğimiz entity i işaretledik sonra da _unitOfWork.CommitAsync() dedik
         }
 
         public async Task RemoveRangeAsync(IEnumerable<T> entities)
         {
             _repository.RemoveRange(entities);
-             await _unitOfWork.CommitAsync();
+            await _unitOfWork.CommitAsync();
         }
 
         public async Task UpdateAsync(T entity)
         {
-            _repository.Update(entity); 
+            _repository.Update(entity);
             await _unitOfWork.CommitAsync();
         }
 

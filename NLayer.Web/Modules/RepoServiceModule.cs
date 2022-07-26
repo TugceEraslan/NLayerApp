@@ -12,7 +12,7 @@ using Module = Autofac.Module;
 
 namespace NLayer.Web.Modules
 {
-    public class RepoServiceModule:Module
+    public class RepoServiceModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
@@ -28,10 +28,10 @@ namespace NLayer.Web.Modules
 
             builder.RegisterAssemblyTypes(apiAssembly, repoAssembly, serviceAssembly).Where(x => x.Name.EndsWith("Service")).AsImplementedInterfaces().InstancePerLifetimeScope();    // Sonları Repository ile bitenleri al demek. AsImplementedInterfaces interfacelerini de implemente et demek. InstancePerLifetimeScope(); nesnenin yaşam döngüsü?
 
-            
+
             // InstancePerLifetimeScope();  .net de Scope a karşılık geliyor
             // InstancePerDependency(); transient e karşılık geliyor
-            base.Load(builder); 
+            base.Load(builder);
         }
     }
 }

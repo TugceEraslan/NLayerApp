@@ -1,11 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NLayer.Core.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NLayer.Repository.Repositories
 {
@@ -17,7 +12,7 @@ namespace NLayer.Repository.Repositories
         public GenericRepository(AppDbContext context)
         {
             _context = context;
-            _dbSet =_context.Set<T>();
+            _dbSet = _context.Set<T>();
         }
 
         public async Task AddAsync(T entity)
@@ -50,11 +45,11 @@ namespace NLayer.Repository.Repositories
         public void Remove(T entity)
         {
             _dbSet.Remove(entity);  // Aslında Remove komutu ile veritabanından silme işlemi yapmıyoruz.Entity nin state ini değiştiriyoruz
-         // _context.Entry(entity).State = EntityState.Deleted; yapmak ile aynı yukardaki işlem
+                                    // _context.Entry(entity).State = EntityState.Deleted; yapmak ile aynı yukardaki işlem
         }
 
-        public void RemoveRange(IEnumerable<T> entities)   
-                                                           
+        public void RemoveRange(IEnumerable<T> entities)
+
         {
             _dbSet.RemoveRange(entities); // foreach ile entity lerde dönüp her bir entity nin state ini deleted olarak işaretliyor
                                           // ne zaman SaveChanges() yaparsam işaretlediği deleted flagli entityleri veritabanından siliyor

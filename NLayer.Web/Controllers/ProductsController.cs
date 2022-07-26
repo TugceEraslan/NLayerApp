@@ -29,8 +29,8 @@ namespace NLayer.Web.Controllers
         public async Task<IActionResult> Save()
         {
             // Product ve Category ler arasında bire çok bir ilişki var
-            var categories=_categoryService.GetAllAsync();
-            var categoriesDto = _mapper.Map<List<CategoryDto>>(categories);   // Neti mapleyeceksem onnu yazıyorum Map<List<CategoryDto>>(categories) şeklinde
+            var categories = await _categoryService.GetAllAsync();
+            var categoriesDto = _mapper.Map<List<CategoryDto>>(categories.ToList());   // Neti mapleyeceksem onnu yazıyorum Map<List<CategoryDto>>(categories) şeklinde
             ViewBag.categories = new SelectList(categoriesDto, "Id", "Name");
             return View();
         }
@@ -46,8 +46,8 @@ namespace NLayer.Web.Controllers
                 return RedirectToAction(nameof(Index));  // Kaydettikten sonra direkt index sayfasına gitsin. Tip güvenli bir şekilde gitmesi için nameof ekledim başına
             }
 
-            var categories = _categoryService.GetAllAsync();
-            var categoriesDto = _mapper.Map<List<CategoryDto>>(categories);   // Neyi mapleyeceksem onnu yazıyorum Map<List<CategoryDto>>(categories) şeklinde
+            var categories = await _categoryService.GetAllAsync();
+            var categoriesDto = _mapper.Map<List<CategoryDto>>(categories.ToList());   // Neyi mapleyeceksem onnu yazıyorum Map<List<CategoryDto>>(categories) şeklinde
             ViewBag.categories = new SelectList(categoriesDto, "Id", "Name");
             return View();  // Eğer başarısız ise category i tekrar yüklesin aynı sayfaya tekrar dönsün
         }
