@@ -49,7 +49,7 @@ namespace NLayer.Web.Controllers
             var categories = await _categoryService.GetAllAsync();
             var categoriesDto = _mapper.Map<List<CategoryDto>>(categories.ToList());   // Neyi mapleyeceksem onnu yazıyorum Map<List<CategoryDto>>(categories) şeklinde
             ViewBag.categories = new SelectList(categoriesDto, "Id", "Name");
-            return View();  // Eğer başarısız ise category i tekrar yüklesin aynı sayfaya tekrar dönsün
+            return View();  // Eğer başarısız ise category i tekrar yüklesin aynı sayfaya tekrar dönsün amam category i aynı sayfada tutarak dönsün
         }
 
         [HttpGet]
@@ -69,17 +69,24 @@ namespace NLayer.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(ProductDto productDto)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid)  // IsValid değilse herhangi bir alanı boş bıraktıysa ikinci blokta tekrar çekmesi için  ???
             {
                 await _services.UpdateAsync(_mapper.Map<Product>(productDto));
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index)); // Başarılıysa Indexe gitsin
             }
-
+            //
             var categories = await _categoryService.GetAllAsync();
             var categoriesDto = _mapper.Map<List<CategoryDto>>(categories.ToList());   // Neyi mapleyeceksem onu yazıyorum Map<List<CategoryDto>>(categories) şeklinde
             ViewBag.categories = new SelectList(categoriesDto, "Id", "Name", productDto.CategoryId);
-            return View (productDto);  // productDto nesnemi döndüm
+            return View (productDto);  // productDto nesnemi döndüm. Başarısızsa tekrar dolsun
 
+        }
+        
+        public async Task<IActionResult> Remove(int id)
+        {
+            var product= await _services.GetByIdAsync(id);  // Bana önce product ı ver
+            await _services.RemoveAsync(product);
+            return RedirectToAction(nameof(Index));
         }
 
     }
