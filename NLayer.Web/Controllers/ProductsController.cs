@@ -51,7 +51,7 @@ namespace NLayer.Web.Controllers
             ViewBag.categories = new SelectList(categoriesDto, "Id", "Name");
             return View();  // Eğer başarısız ise category i tekrar yüklesin aynı sayfaya tekrar dönsün amam category i aynı sayfada tutarak dönsün
         }
-
+        [ServiceFilter(typeof(NotFoundFilter<Product>))]
         [HttpGet]
         public async Task<IActionResult> Update(int id)
         {
