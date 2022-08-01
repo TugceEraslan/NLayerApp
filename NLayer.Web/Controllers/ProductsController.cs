@@ -22,7 +22,7 @@ namespace NLayer.Web.Controllers
 
         public async Task<IActionResult> Index()  // Listeleme sayfam olsun
         {
-            return View(await _services.GetProductsWithCategory());
+            return View(await _services.GetProductsWithCategory());  // Sonuna .Data) ekle ???????? to do //
         }
 
         [HttpGet]
