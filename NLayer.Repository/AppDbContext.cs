@@ -15,7 +15,56 @@ namespace NLayer.Repository
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductFeature> ProductFeatures { get; set; }
+        public override int SaveChanges()
+        {
+            foreach (var item in ChangeTracker.Entries())  // Entity lerimizi izliyoruz foreach le dönüp
+            {
+                if (item.Entity is BaseEntity entityReference)  // item.Entity den geleni referans olarak aldım
+                {
+                    switch (item.Entity)
+                    {
+                        case EntityState.Added:   // Entity eklenme durumu varsa
+                            {
+                                entityReference.CreatedDate = DateTime.Now;
+                                break;
+                            }
+                        case EntityState.Modified:  // Güncelleme ise
+                            {
+                                Entry(entityReference).Property(x => x.CreatedDate).IsModified = false;  // EntityState.Modified olduğunda Property(x => x.CreatedDate).IsModified=false; demek CreatedDate e dokunma bu alan Db deki ile aynı kalsın. O yüzden .IsModified=false oldu
+                                entityReference.UpdatedDate = DateTime.Now;
+                                break;
+                            }
+                    }
+                }
 
+            }
+            return base.SaveChanges();
+        }
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            foreach (var item in ChangeTracker.Entries())  // Entity lerimizi izliyoruz foreach le dönüp
+            {
+                if(item.Entity is BaseEntity entityReference)  // item.Entity den geleni referans olarak aldım
+                {
+                    switch (item.Entity)
+                    {
+                        case EntityState.Added:   // Entity eklenme durumu varsa
+                        {
+                                entityReference.CreatedDate = DateTime.Now;
+                                break;
+                        }      
+                        case EntityState.Modified:  // Güncelleme ise
+                        {
+                                entityReference.UpdatedDate = DateTime.Now;
+                                break;
+                        }
+                    }
+                }
+
+            }
+
+            return base.SaveChangesAsync(cancellationToken);
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
